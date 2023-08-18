@@ -6,26 +6,16 @@
   </template>
   
   <script>
-  import axios from 'axios';
+  import { mapMutations, mapState } from 'vuex';
   
   export default {
-    data() {
-      return {
-        lopeNummer: null
-      };
-    },
     methods: {
-      async trekkKolapp() {
-        try {
-          // Hent løpenummer fra serveren
-          const response = await axios.post('/api/lopenummer'); // Endre URL til din server-endepunkt
-          this.lopeNummer = response.data.lopenummer;
-          
-          // Naviger til "kø"-siden med behandlingsnummer og løpeNummer
-          this.$router.push({ name: "ko", params: { lopeNummer: this.lopeNummer } });
-        } catch (error) {
-          console.error('Feil ved henting av løpenummer:', error);
-        }
+      ...mapState(['lopenummer']),
+      ...mapMutations(['incrementLopenummer']),
+      trekkKolapp() {
+        const dittLopenummer = this.lopenummer();
+        this.incrementLopenummer();
+        this.$router.push({ name: "ko", params: { lopenummer: dittLopenummer } });
       }
     }
   };

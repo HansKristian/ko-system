@@ -7,7 +7,7 @@ const routes = [
   { path: "/", redirect: "/trekk-kolapp" },
   { path: "/trekk-kolapp", component: TrekkKolapp },
   { path: "/carl-olav", component: CarlOlav },
-  { path: "/ko/:lopeNummer", name: "ko", component: QueueDisplay, props: true }
+  { path: "/ko/:lopenummer", name: "ko", component: QueueDisplay, props: true }
 ];
 
 const router = createRouter({

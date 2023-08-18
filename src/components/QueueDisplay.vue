@@ -1,5 +1,4 @@
 <template>
-  
   <div v-if="erDinTur">
       <p class="big-text green-text">Det din tur!</p>
   </div>
@@ -10,50 +9,25 @@
   </div>
   <div class="ticket-box">
       <p class="ticket-text">Din kø-lapp</p>
-      <p class="ticket-number">{{ lopeNummer }}</p>
+      <p class="ticket-number">{{ lopenummer }}</p>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
-  data() {
-    return {
-      behandlingsnummer: null,
-    };
-  },
+
   props: {
-    lopeNummer: String,
+    lopenummer: String,
   },
+
   computed: {
+    ...mapState(['behandlingsnummer']),
     erDinTur() {
-      return this.lopeNummer <= this.behandlingsnummer;
-    },
-  },
-  methods: {
-    async fetchBehandlingsnummer() {
-      try {
-        const response = await axios.get('/api/behandlingsnummer'); // Endre URL-en til riktig endepunkt
-        this.behandlingsnummer = response.data.behandlingsnummer;
-      } catch (error) {
-        console.error('Feil ved henting av behandlingsnummer:', error);
-      }
-    },
-    initWebSocket() {
-      const socket = new WebSocket('wss://ko-system.netlify.app/.netlify/functions/server'); // Endre URL-en til WebSocket-serveren
-      socket.addEventListener('message', (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'behandlingsnummerUpdate' || data.type === 'reset') {
-          this.fetchBehandlingsnummer();
-        }
-      });
-    },
-  },
-  mounted() {
-    this.fetchBehandlingsnummer();
-    this.initWebSocket();
-  },
+      return this.lopenummer <= this.behandlingsnummer;
+    }
+  }
 };
 </script>
 <style>

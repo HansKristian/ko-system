@@ -1,72 +1,23 @@
 <template>
   <div>
     <p>Nå behandles nummer: <span class="medium-text ">{{ behandlingsnummer }}</span></p>
-    <p>Antall som venter: {{ antall }}</p>
-    <button class="blue-button" @click="okBehandling">Neste</button>
+    <p>Antall som venter: 2</p>
+    <button class="blue-button" @click="incrementBehandlingsnummer">Neste</button>
     <br />
     <button class="red-button" @click="reset">Reset</button>
   </div>
 </template>
   
   <script>
-  import axios from 'axios';
+  import { mapState, mapMutations } from 'vuex';
   
   export default {
-    data() {
-      return {
-        behandlingsnummer: 1,
-        antall: 1,
-      };
+    computed: {
+      ...mapState(['behandlingsnummer', 'lopenummer'])
     },
     methods: {
-      async okBehandling() {
-        try {
-          this.behandlingsnummer++
-          await axios.post('/api/increment'); // Kall serveren for å øke behandlingsnummeret
-          await this.fetchBehandlingsnummer(); // Oppdater behandlingsnummeret
-        } catch (error) {
-          console.error('Feil ved øking av behandlingsnummer:', error);
-        }
-      },
-      async reset() {
-        try {
-          await axios.post('/api/reset'); // Kall serveren for å tilbakestille behandlingsnummeret
-          await this.fetchBehandlingsnummer(); // Oppdater behandlingsnummeret
-        } catch (error) {
-          console.error('Feil ved tilbakestilling av behandlingsnummer:', error);
-        }
-      },
-      async fetchBehandlingsnummer() {
-        try {
-          const response = await axios.get('/api/behandlingsnummer'); // Hent behandlingsnummer fra serveren
-          this.behandlingsnummer = response.data.behandlingsnummer;
-        } catch (error) {
-          console.error('Feil ved henting av behandlingsnummer:', error);
-        }
-      },
-      async fetchAntall() {
-        try {
-          const response = await axios.get('/api/antall'); // Hent behandlingsnummer fra serveren
-          this.antall = response.data.antall;
-        } catch (error) {
-          console.error('Feil ved henting av behandlingsnummer:', error);
-        }
-      },
-      initWebSocket() {
-        const socket = new WebSocket('wss://ko-system.netlify.app/.netlify/functions/server'); // Endre URL-en til WebSocket-serveren
-        socket.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'lopenummerUpdate' || data.type === 'reset' || data.type === 'behandlingsnummerUpdate') {
-                this.fetchAntall();
-            }
-      });
-    },
-    },
-    mounted() {
-      this.fetchBehandlingsnummer(); // Hent behandlingsnummer ved komponentmontering
-      this.fetchAntall();
-      this.initWebSocket();
-    },
+      ...mapMutations(['incrementBehandlingsnummer', 'reset']),
+    }
   };
   </script>
 
