@@ -2,3 +2,19 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[build]
+  functions = "server"
+
+[[redirects]]
+  from = "/webhook/*"
+  to = "/.netlify/functions/webhook/:splat"
+  status = 200
+
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "/.netlify/functions/api/:splat"
+
+
