@@ -7,11 +7,6 @@
   functions = "server"
 
 [[redirects]]
-  from = "/webhook/*"
-  to = "/.netlify/functions/server/webhook/:splat"
-  status = 200
-
-[[redirects]]
   force = true
   from = "/api/*"
   status = 200

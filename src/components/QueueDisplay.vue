@@ -41,7 +41,7 @@ export default {
       }
     },
     initWebSocket() {
-      const socket = new WebSocket('wss://ko-system.netlify.app/.netlify/functions/server'); // Endre URL-en til WebSocket-serveren
+      const socket = new WebSocket('ws:localhost:3000'); // TODO hvilken URL skal være her?
       socket.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
         if (data.type === 'behandlingsnummerUpdate' || data.type === 'reset') {
